@@ -1,0 +1,4 @@
+name: 'Order form'
+description: 'custom order form'
+core: 8.x
+type: module

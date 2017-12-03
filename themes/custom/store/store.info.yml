@@ -1,0 +1,15 @@
+name: Store
+description: 'My theme for wholesale store'
+type: theme
+core: 8.x
+
+libraries:
+  - store/bootstrap
+  - store/custom
+
+regions:
+  header: 'Header'
+  content: 'Content'
+  left_sidebar: 'Left sidebar'
+  right_sidebar: 'Right sidebar'
+  footer: 'Footer'

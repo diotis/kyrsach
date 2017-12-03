@@ -1,0 +1,14 @@
+{% if primary %}
+  <h2 class="visually-hidden">{{ 'Primary tabs'|t }}</h2>
+  <div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+       View
+      <span class="caret"></span>
+    </button>
+  <ul class="dropdown-menu">{{ primary }}</ul>
+  </div>
+{% endif %}
+{% if secondary %}
+  <h2 class="visually-hidden">{{ 'Secondary tabs'|t }}</h2>
+  <ul>{{ secondary }}</ul>
+{% endif %}
