@@ -1,0 +1,39 @@
+order_table:
+  path: '/order_table'
+  defaults:
+    _title: 'Orders'
+    _controller: '\Drupal\order_table\Controller\DbOrdersController::entryList'
+  requirements:
+    _permission: 'access content'
+
+dbtng_list:
+  path: '/order_table/list'
+  defaults:
+    _title: 'List'
+    _controller: '\Drupal\order_table\Controller\DbOrdersController::entryList'
+  requirements:
+    _permission: 'access content'
+
+dbtng_add:
+  path: '/order_table/add'
+  defaults:
+    _title: 'Add Entry'
+    _form: '\Drupal\order_table\Form\DbOrdersAddForm'
+  requirements:
+    _permission: 'access content'
+
+dbtng_update:
+  path: '/order_table/update'
+  defaults:
+    _title: 'Update Entry'
+    _form: '\Drupal\order_table\Form\DbOrdersUpdateForm'
+  requirements:
+    _permission: 'access content'
+
+dbtng_advanced:
+  path: '/order_table/advanced'
+  defaults:
+    _title: 'Advanced List'
+    _controller: '\Drupal\order_table\Controller\DbOrdersController::entryAdvancedList'
+  requirements:
+    _permission: 'access content'

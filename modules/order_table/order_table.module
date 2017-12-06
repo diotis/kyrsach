@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function order_table_theme() {
+    return array(
+        'order_table_theme' => array( // Theme name
+            'variables' => array( // Array of name for varialbles
+                'data' => array(),
+            ),
+            'templates' => 'templates/orders', 
+        ),
+    );
+}
