@@ -12,5 +12,7 @@ custom:
   css:
     theme:
       css/app.css: {}
+      css/front_page.css: {}
   js:
     js/app.js: {}
+    js/jquery.glide.min.js: {}

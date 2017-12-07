@@ -2,6 +2,6 @@ order_form.order_form:
   path: '/order'
   defaults:
     _form:  '\Drupal\order_form\Form\ExForm'
-    _title: 'Custom form'
+    _title: 'Оформить заказ'
   requirements:
     _permission: 'access content'

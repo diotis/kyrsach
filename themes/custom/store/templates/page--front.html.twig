@@ -1,1 +1,41 @@
 {% extends "page.html.twig" %}
+{% block content%}
+    {{ page.content }}
+
+    <div class="slider">
+        <ul class="slides">
+            <li class="slide">
+                <figure>
+                    <img src="http://kyrsach/themes/custom/store/front_page/2904b.png">
+                </figure>
+            </li>
+            <li class="slide">
+                <figure>
+                    <img src="http://kyrsach/themes/custom/store/front_page/3204b.png">
+                </figure>
+            </li>
+            <li class="slide">
+                <figure>
+                    <img src="http://kyrsach/themes/custom/store/front_page/3214b.png">
+                </figure>
+            </li>
+            <li class="slide">
+                <figure>
+                    <img src="http://kyrsach/themes/custom/store/front_page/3314b.png">
+                </figure>
+            </li>
+        </ul>
+    </div>
+
+    <script type="text/javascript">
+        $(function(){
+            $('.slider').glide({
+                autoplay: 3400,
+                hoverpause: true,
+                arrowRightText: '&rarr;',
+                arrowLeftText: '&larr;'
+            });
+        });
+    </script>
+
+{% endblock %}

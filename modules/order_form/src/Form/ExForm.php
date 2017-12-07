@@ -11,41 +11,42 @@ class ExForm extends FormBase
     {
         $form['first_name'] = [
             '#type' => 'textfield',
-            '#title' => $this->t('Firs name'),
+            '#title' => $this->t('Ваше имя'),
             '#required' => TRUE,
             '#size'=>30,
         ];
         $form['last_name'] = [
             '#type' => 'textfield',
-            '#title' => $this->t('Last name'),
+            '#title' => $this->t('Ваша фамилия'),
             '#required' => TRUE,
             '#size'=>30,
         ];
 
         $form['subject'] = [
             '#type' => 'textfield',
-            '#title' => $this->t('Subject'),
+            '#title' => $this->t('Тема'),
             '#required' => TRUE,
             '#size'=>30,
         ];
 
         $form['message'] = [
             '#type' => 'textarea',
-            '#title' => $this->t('Message'),
+            '#title' => $this->t('Сообщение'),
             '#required' => TRUE,
         ];
 
         $form['email'] = array(
             '#type' => 'email',
             '#title' => $this->t('E-mail'),
-            '#description' => $this->t('Enter Your Email.'),
-            '#placeholder' => $this->t('your e-mail'),
+            '#description' => $this->t('Введите ваш e-mail.'),
+            '#placeholder' => $this->t('example@gmail.com'),
             '#size'=>30,
         );
         $form['tel'] = array(
             '#type' => 'tel',
-            '#title' => $this->t('tel'),
-            '#description' => $this->t('Enter your phone number: +375'),
+            '#title' => $this->t('Телефон'),
+            '#description' => $this->t('Enter your phone number'),
+            '#placeholder' => $this->t('+375 (..) ... ... .'),
             '#pattern' => '375[0-9]{9}',
         );
 

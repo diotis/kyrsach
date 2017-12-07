@@ -1,6 +1,40 @@
-body{
-    background: #EB7F7F;
-}
 .container-fluid{
     padding: 0;
+}
+.my-form{
+margin: 20px;
+}
+
+input {
+    width: 100%;
+    margin-bottom: 20px;
+}
+input[type='submit']{
+    width: 200px;
+}
+
+textarea {
+    width: 100%;
+    margin-bottom: 20px;
+}
+.page_content{
+    margin: 10px;
+}
+.page_data{
+    margin: 10px;
+}
+.capability{
+    top: -40px;
+    right: 50px;
+    position: relative;
+    float: right;
+}
+.menu{
+    border-top: 2px solid grey;
+    padding-top: 20px;
+    padding-bottom: 30px;
+    background: pink;
+}
+html{
+    height: 100%;
 }

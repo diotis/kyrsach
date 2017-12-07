@@ -1,7 +1,7 @@
 order_table:
   path: '/order_table'
   defaults:
-    _title: 'Orders'
+    _title: 'Заявки'
     _controller: '\Drupal\order_table\Controller\DbOrdersController::entryList'
   requirements:
     _permission: 'access content'
