@@ -7,10 +7,8 @@ margin: 20px;
 
 input {
     width: 100%;
-    margin-bottom: 20px;
 }
 input[type='submit']{
-    width: 200px;
 }
 
 textarea {
@@ -37,4 +35,7 @@ textarea {
 }
 html{
     height: 100%;
+}
+#edit-submit{
+    width: 150px;
 }

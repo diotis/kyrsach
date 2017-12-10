@@ -4,35 +4,24 @@ namespace Drupal\order_table\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\order_table\OrdersStorage;
+use Drupal\order_table\DbOrdersStorage;
 
-/**
- * Sample UI to update a record.
- */
 class DbOrdersUpdateForm extends FormBase {
 
-  /**
-   * {@inheritdoc}
-   */
   public function getFormId() {
     return 'dbtng_update_form';
   }
 
-  /**
-   * Sample UI to update a record.
-   */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    // Wrap the form in a div.
     $form = [
       '#prefix' => '<div id="updateform">',
       '#suffix' => '</div>',
     ];
-    // Add some explanatory text to the form.
     $form['message'] = [
       '#markup' => $this->t('Demonstrates a database update operation.'),
     ];
     // Query for items to display.
-    $entries = DbtngExampleStorage::load();
+    $entries = DbOrdersStorage::load();
     // Tell the user if there is nothing to display.
     if (empty($entries)) {
       $form['no_values'] = [
@@ -99,7 +88,6 @@ class DbOrdersUpdateForm extends FormBase {
     ];
     return $form;
   }
-
   /**
    * AJAX callback handler for the pid select.
    *

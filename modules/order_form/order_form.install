@@ -54,6 +54,10 @@ function order_form_schema() {
         'type' => 'varchar',
         'length' => 45,
       ),
+      'user' => array(
+        'description' => 'user id',
+        'type' => 'int',
+      ),
     ),
     'primary key' => array('id'),
   );

@@ -4,7 +4,6 @@ namespace Drupal\order_table;
 
 class DbOrdersStorage {
 
-
   public static function insert(array $entry) {
     $return_value = NULL;
     try {
@@ -40,19 +39,31 @@ class DbOrdersStorage {
     }
     return $count;
   }
+    public static function load_po_id(array $entry = []) {
+        // Read all fields from the dbtng_example table.
+        $select = db_select('order_form', 'orders');
+        $select->condition('user', \Drupal::currentUser()->id());
+        $select->fields('orders');
+
+        // Add each field and value as a condition to this query.
+        foreach ($entry as $field => $value) {
+            $select->condition($field, $value);
+        }
+        // Return the result in object format.
+        return $select->execute()->fetchAll();
+    }
 
 
-  public static function delete(array $entry) {
+  public static function delete($id) {
     db_delete('order_form')
-      ->condition('id', $entry['id'])
-      ->execute();
-  }
+        ->condition('id', $id)
+        ->execute();
+}
 
   public static function load(array $entry = []) {
     // Read all fields from the dbtng_example table.
     $select = db_select('order_form', 'orders');
     $select->fields('orders');
-
     // Add each field and value as a condition to this query.
     foreach ($entry as $field => $value) {
       $select->condition($field, $value);
@@ -60,8 +71,6 @@ class DbOrdersStorage {
     // Return the result in object format.
     return $select->execute()->fetchAll();
   }
-
-
   // public static function advancedLoad() {
   //   $select = db_select('order_form', 'e');
   //   // Join the users table, so we can get the entry creator's username.

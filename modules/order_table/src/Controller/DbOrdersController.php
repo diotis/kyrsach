@@ -4,10 +4,11 @@ namespace Drupal\order_table\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\order_table\DbOrdersStorage;
+use \Symfony\Component\HttpFoundation\Response;
 
 class DbOrdersController extends ControllerBase {
 
-  public function entryList() {
+    public function entryList() {
     $content = [];
 
     $content['message'] = [
@@ -19,7 +20,9 @@ class DbOrdersController extends ControllerBase {
 
     foreach ($entries = DbOrdersStorage::load() as $entry) {
       // Sanitize each entry.
-      $rows[] = array_map('Drupal\Component\Utility\SafeMarkup::checkPlain', (array) $entry);
+      $need = array_map('Drupal\Component\Utility\SafeMarkup::checkPlain', (array) $entry);
+      array_pop($need);
+      $rows[]=$need;
     }
     $content['table'] = [
       '#type' => 'table',
@@ -27,46 +30,127 @@ class DbOrdersController extends ControllerBase {
       '#rows' => $rows,
       '#empty' => t('No entries available.'),
     ];
-    // Don't cache this page.
     $content['#cache']['max-age'] = 0;
 
     return $content;
   }
 
-  /**
-   * Render a filtered list of entries in the database.
-   */
-  public function entryAdvancedList() {
-    $content = [];
+    public function my_entryList() {
+        $content = [];
 
-    $content['message'] = [
-      '#markup' => $this->t('A more complex list of entries in the database.') . ' ' .
-      $this->t('Only the entries with name = "John" and age older than 18 years are shown, the username of the person who created the entry is also shown.'),
-    ];
+        $content['message'] = [
+            '#markup' => $this->t('Generate a list of all entries in the database. There is no filter in the query.'),
+        ];
 
-    $headers = [
-      t('Id'),
-      t('Created by'),
-      t('Name'),
-      t('Surname'),
-      t('Age'),
-    ];
+        $headers = [t('Name'), t('Surname'), t('Subject'), t('Message'), t('email'), t('phone')];
 
-    $rows = [];
-    foreach ($entries = DbtngExampleStorage::advancedLoad() as $entry) {
-      // Sanitize each entry.
-      $rows[] = array_map('Drupal\Component\Utility\SafeMarkup::checkPlain', $entry);
+        $content['table'] = [
+            '#type' => 'table',
+            '#header' => $headers,
+            '#empty' => t('No entries available.'),
+        ];
+
+        $entries = DbOrdersStorage::load_po_id();
+
+        for( $i=0; $i<count($entries); $i++){
+            $content['table'][$i]['name'] = array(
+                '#markup' => $this->t($entries[$i]->name),
+            );
+            $content['table'][$i]['last_name'] = array(
+                '#markup' => $this->t($entries[$i]->last_name),
+            );
+            $content['table'][$i]['subject'] = array(
+                '#markup' => $this->t($entries[$i]->subject),
+            );
+            $content['table'][$i]['message'] = array(
+                '#markup' => $this->t($entries[$i]->message),
+            );
+            $content['table'][$i]['email'] = array(
+                '#markup' => $this->t($entries[$i]->email),
+            );
+            $content['table'][$i]['tel'] = array(
+                '#markup' => $this->t($entries[$i]->tel),
+            );
+            $content['table'][$i]['delete'] = array(
+                '#type' => 'submit',
+                '#value' => 'Удалить',
+                '#attributes' => array('id'=>'del', 'data'=>$i),
+            );
+            $content['table'][$i]['edit'] = array(
+                '#type' => 'submit',
+                '#value' => 'Редактировать',
+                '#attributes' => array('id'=>'edit', 'data'=>$i),
+
+            );
+        }
+
+        $content['#cache']['max-age'] = 0;
+        return $content;
     }
-    $content['table'] = [
-      '#type' => 'table',
-      '#header' => $headers,
-      '#rows' => $rows,
-      '#attributes' => ['id' => 'dbtng-example-advanced-list'],
-      '#empty' => t('No entries available.'),
-    ];
-    // Don't cache this page.
-    $content['#cache']['max-age'] = 0;
-    return $content;
-  }
+
+    public function del($id){
+        DbOrdersStorage::delete(DbOrdersStorage::load_po_id()[$id]->id);
+        $build = array(
+            '#type' => 'markup',
+            '#markup' => t($id),
+        );
+        return new Response(render($build));
+    }
+
+    public function edit($id){
+        $data = DbOrdersStorage::load_po_id()[$id];
+
+        $form['first_name'] = [
+            '#type' => 'textfield',
+            '#title' => $this->t('Ваше имя'),
+            '#required' => TRUE,
+            '#value'=> $data->name,
+        ];
+        $form['last_name'] = [
+            '#type' => 'textfield',
+            '#title' => $this->t('Ваша фамилия'),
+            '#required' => TRUE,
+            '#value'=> $data->last_name,
+        ];
+
+        $form['subject'] = [
+            '#type' => 'textfield',
+            '#title' => $this->t('Тема'),
+            '#required' => TRUE,
+            '#value'=> $data->subject,
+        ];
+
+        $form['message'] = [
+            '#type' => 'textarea',
+            '#title' => $this->t('Сообщение'),
+            '#required' => TRUE,
+            '#value'=> $data->message,
+        ];
+
+        $form['email'] = array(
+            '#type' => 'email',
+            '#title' => $this->t('E-mail'),
+            '#placeholder' => $this->t('example@gmail.com'),
+            '#value'=> $data->email,
+        );
+        $form['tel'] = array(
+            '#type' => 'tel',
+            '#title' => $this->t('Телефон'),
+            '#placeholder' => $this->t('+375 (..) ... ... .'),
+            '#pattern' => '375[0-9]{9}',
+            '#value'=> $data->tel,
+        );
+
+        $form['actions']['submit'] = [
+            '#type' => 'submit',
+            '#value' => $this->t('Редактировать заказ'),
+            '#submit' => ['::submitForm'],
+        ];
+        return $form;
+    }
+
+    public function submitForm(array &$form, FormStateInterface $form_state) {
+        echo 'error';
+    }
 
 }

@@ -13,20 +13,18 @@ class ExForm extends FormBase
             '#type' => 'textfield',
             '#title' => $this->t('Ваше имя'),
             '#required' => TRUE,
-            '#size'=>30,
+            //'#value'=>\Drupal::currentUser(),
         ];
         $form['last_name'] = [
             '#type' => 'textfield',
             '#title' => $this->t('Ваша фамилия'),
             '#required' => TRUE,
-            '#size'=>30,
         ];
 
         $form['subject'] = [
             '#type' => 'textfield',
             '#title' => $this->t('Тема'),
             '#required' => TRUE,
-            '#size'=>30,
         ];
 
         $form['message'] = [
@@ -40,7 +38,6 @@ class ExForm extends FormBase
             '#title' => $this->t('E-mail'),
             '#description' => $this->t('Введите ваш e-mail.'),
             '#placeholder' => $this->t('example@gmail.com'),
-            '#size'=>30,
         );
         $form['tel'] = array(
             '#type' => 'tel',
@@ -82,6 +79,8 @@ class ExForm extends FormBase
         $val = $form_state->getValues();
         $query = \Drupal::database()->insert('order_form');
 
+        $user_id = \Drupal::currentUser()->id();
+        if(!$user_id)$user_id=-1;
         $query->fields([
             'name' => $val['first_name'],
             'last_name' => $val['last_name'],
@@ -89,9 +88,9 @@ class ExForm extends FormBase
             'message' => $val['message'],
             'email' => $val['email'],
             'tel' => $val['tel'],
+            'user' => $user_id,
         ]);
         $query->execute();
-
 
         drupal_set_message('Ваш заказ принят!');
     }

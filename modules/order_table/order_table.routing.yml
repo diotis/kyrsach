@@ -6,34 +6,54 @@ order_table:
   requirements:
     _permission: 'access content'
 
-dbtng_list:
-  path: '/order_table/list'
+
+my_orders:
+  path: '/my_orders'
   defaults:
-    _title: 'List'
-    _controller: '\Drupal\order_table\Controller\DbOrdersController::entryList'
+    _title: 'Мои заявки'
+    _controller: '\Drupal\order_table\Controller\DbOrdersController::my_entryList'
   requirements:
     _permission: 'access content'
 
-dbtng_add:
-  path: '/order_table/add'
+
+my_order_del:
+  path: '/del/{id}'
   defaults:
-    _title: 'Add Entry'
-    _form: '\Drupal\order_table\Form\DbOrdersAddForm'
+    _title: 'Удаление'
+    _controller: '\Drupal\order_table\Controller\DbOrdersController::del'
   requirements:
     _permission: 'access content'
 
-dbtng_update:
-  path: '/order_table/update'
+my_order_edit:
+  path: '/edit/{id}'
   defaults:
-    _title: 'Update Entry'
-    _form: '\Drupal\order_table\Form\DbOrdersUpdateForm'
+    _title: 'Редактирование'
+    _controller: '\Drupal\order_table\Controller\DbOrdersController::edit'
   requirements:
     _permission: 'access content'
 
-dbtng_advanced:
-  path: '/order_table/advanced'
-  defaults:
-    _title: 'Advanced List'
-    _controller: '\Drupal\order_table\Controller\DbOrdersController::entryAdvancedList'
-  requirements:
-    _permission: 'access content'
+#
+#dbtng_list:
+#  path: '/order_table/list'
+#  defaults:
+#    _title: 'List'
+#    _controller: '\Drupal\order_table\Controller\DbOrdersController::entryList'
+#  requirements:
+#    _permission: 'access content'
+#
+#dbtng_add:
+#  path: '/order_table/add'
+#  defaults:
+#    _title: 'Add Entry'
+#    _form: '\Drupal\order_table\Form\DbOrdersAddForm'
+#  requirements:
+#    _permission: 'access content'
+#
+
+#dbtng_advanced:
+#  path: '/order_table/advanced'
+#  defaults:
+#    _title: 'Advanced List'
+#    _controller: '\Drupal\order_table\Controller\DbOrdersController::entryAdvancedList'
+#  requirements:
+#    _permission: 'access content'
