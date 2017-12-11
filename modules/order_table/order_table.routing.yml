@@ -28,7 +28,7 @@ my_order_edit:
   path: '/edit/{id}'
   defaults:
     _title: 'Редактирование'
-    _controller: '\Drupal\order_table\Controller\DbOrdersController::edit'
+    _form: 'Drupal\order_table\Form\DbOrdersUpdateForm'
   requirements:
     _permission: 'access content'
 

@@ -1,10 +1,12 @@
 (function ($) {
     Drupal.behaviors.myModuleBehavior = {
         attach: function (context, settings) {
-
-            function del() {
-                $a
-            }
+                $('.slider').glide({
+                    autoplay: 4000,
+                    hoverpause: true,
+                    arrowRightText: '&rarr;',
+                    arrowLeftText: '&larr;'
+                });
         }
     };
 })(jQuery);
