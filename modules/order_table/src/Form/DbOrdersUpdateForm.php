@@ -74,7 +74,7 @@ class DbOrdersUpdateForm extends FormBase {
 
       $form['actions']['submit'] = [
           '#type' => 'submit',
-          '#value' => $this->t('Редактировать заказ'),
+          '#value' => $this->t('Редактировать'),
       ];
       return $form;
 

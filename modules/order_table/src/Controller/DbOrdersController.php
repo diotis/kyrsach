@@ -12,7 +12,7 @@ class DbOrdersController extends ControllerBase {
     $content = [];
 
     $content['message'] = [
-      '#markup' => $this->t('Generate a list of all entries in the database. There is no filter in the query.'),
+      '#markup' => $this->t('Список отправленных пользователями заявок в оптовый магазин'),
     ];
 
     $rows = [];
@@ -39,7 +39,7 @@ class DbOrdersController extends ControllerBase {
         $content = [];
 
         $content['message'] = [
-            '#markup' => $this->t('Generate a list of all entries in the database. There is no filter in the query.'),
+            '#markup' => $this->t('Список отправленных вами заявок в оптовый магазин.'),
         ];
 
         $headers = [t('Name'), t('Surname'), t('Subject'), t('Message'), t('email'), t('phone')];
@@ -73,12 +73,12 @@ class DbOrdersController extends ControllerBase {
             );
             $content['table'][$i]['delete'] = array(
                 '#type' => 'submit',
-                '#value' => 'Удалить',
+                '#value' => 'X',
                 '#attributes' => array('id'=>'del', 'data'=>$i),
             );
             $content['table'][$i]['edit'] = array(
                 '#type' => 'submit',
-                '#value' => 'Редактировать',
+                '#value' => 'Edit',
                 '#attributes' => array('id'=>'edit', 'data'=>$i),
 
             );
