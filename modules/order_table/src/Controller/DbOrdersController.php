@@ -6,53 +6,59 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\order_table\DbOrdersStorage;
 use \Symfony\Component\HttpFoundation\Response;
 
-class DbOrdersController extends ControllerBase {
+class DbOrdersController extends ControllerBase
+{
+    public $isAdmin = false;
 
-    public function entryList() {
-    $content = [];
-
-    $content['message'] = [
-      '#markup' => $this->t('Список отправленных пользователями заявок в оптовый магазин'),
-    ];
-
-    $rows = [];
-    $headers = [t('Id'), t('Name'), t('Surname'), t('Subject'), t('Message'), t('email'), t('phone')];
-
-    foreach ($entries = DbOrdersStorage::load() as $entry) {
-      // Sanitize each entry.
-      $need = array_map('Drupal\Component\Utility\SafeMarkup::checkPlain', (array) $entry);
-      array_pop($need);
-      $rows[]=$need;
-    }
-    $content['table'] = [
-      '#type' => 'table',
-      '#header' => $headers,
-      '#rows' => $rows,
-      '#empty' => t('No entries available.'),
-    ];
-    $content['#cache']['max-age'] = 0;
-
-    return $content;
-  }
-
-    public function my_entryList() {
+    public function entryList()
+    {
+        $user = \Drupal::currentUser();
+        if ($user->isAuthenticated()) {
+            $user = $user->getRoles();
+            if (count($user) > 1) {
+                if ($user[1] == 'administrator') {
+                    $this->isAdmin = true;
+                }
+            }
+        }
         $content = [];
 
         $content['message'] = [
             '#markup' => $this->t('Список отправленных вами заявок в оптовый магазин.'),
         ];
+//
+//        $content['need'] = [
+//            '#type' => 'select',
+//            '#title' => $this->t('Тип заявок: '),
+//            '#options' => [
+//                'all' => $this->t('Все'),
+//                'done' => $this->t('Выполненные'),
+//            ],
+//            '#empty_option' => $this->t('-select-'),
+//        ];
 
-        $headers = [t('Name'), t('Surname'), t('Subject'), t('Message'), t('email'), t('phone')];
-
+        $headers = [t('Имя'), t('Фамилия'), t('Тема'), t('Сообщение'), t('email'), t('телефон')];
+        //if($isAdmin)array_unshift($headers,t(''));
         $content['table'] = [
             '#type' => 'table',
             '#header' => $headers,
-            '#empty' => t('No entries available.'),
+            '#empty' => t('Заявок не найдено, вы должны быть зарегистрированы в системе.'),
         ];
+        if ($this->isAdmin) {
+            $entries = DbOrdersStorage::load();
+        } else {
+            $entries = DbOrdersStorage::load_po_id();
+        }
 
-        $entries = DbOrdersStorage::load_po_id();
+        for ($i = 0; $i < count($entries); $i++) {
 
-        for( $i=0; $i<count($entries); $i++){
+//            if ($isAdmin) {
+//                $content['table'][$i]['done'] = [
+//                    '#type' => 'checkboxes',
+//                    '#options' => ['SAT' => t('SAT'), 'ACT' => t('ACT')],
+//                ];
+//            }
+
             $content['table'][$i]['name'] = array(
                 '#markup' => $this->t($entries[$i]->name),
             );
@@ -74,26 +80,39 @@ class DbOrdersController extends ControllerBase {
             $content['table'][$i]['delete'] = array(
                 '#type' => 'submit',
                 '#value' => 'X',
-                '#attributes' => array('id'=>'del', 'data'=>$i),
+                '#attributes' => array('id' => 'del', 'data' => $i),
             );
-            $content['table'][$i]['edit'] = array(
-                '#type' => 'submit',
-                '#value' => 'Edit',
-                '#attributes' => array('id'=>'edit', 'data'=>$i),
-
-            );
+            if (!$this->isAdmin) {
+                $content['table'][$i]['edit'] = array(
+                    '#type' => 'submit',
+                    '#value' => 'Изменить',
+                    '#attributes' => array('id' => 'edit', 'data' => $i),
+                );
+            }
         }
-
         $content['#cache']['max-age'] = 0;
         return $content;
     }
 
-    public function del($id){
-        DbOrdersStorage::delete(DbOrdersStorage::load_po_id()[$id]->id);
-        $build = array(
-            '#type' => 'markup',
-            '#markup' => t($id),
-        );
+    public
+    function del($id)
+    {
+        $user = \Drupal::currentUser()->getRoles();
+        if ($user[0] == 'authenticated') {
+            if (count($user) > 1) {
+                if ($user[1] == 'administrator') {
+                    $entries = DbOrdersStorage::load();
+                    $this->isAdmin = true;
+                }
+            } else {
+                $entries = DbOrdersStorage::load_po_id();
+            }
+            DbOrdersStorage::delete($entries[$id]->id);
+            $build = array(
+                '#type' => 'markup',
+                '#markup' => t($id),
+            );
+        }
         return new Response(render($build));
     }
 

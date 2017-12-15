@@ -9,16 +9,18 @@ class ExForm extends FormBase
 {
     public function buildForm(array $form, FormStateInterface $form_state)
     {
+        $user = user_load(\Drupal::currentUser()->id());
         $form['first_name'] = [
             '#type' => 'textfield',
             '#title' => $this->t('Ваше имя'),
             '#required' => TRUE,
-            //'#value'=>\Drupal::currentUser(),
+            '#default_value' => $user->field_name->value,
         ];
         $form['last_name'] = [
             '#type' => 'textfield',
             '#title' => $this->t('Ваша фамилия'),
             '#required' => TRUE,
+            '#default_value' => $user->field_familia->value,
         ];
 
         $form['subject'] = [
@@ -38,6 +40,7 @@ class ExForm extends FormBase
             '#title' => $this->t('E-mail'),
             '#description' => $this->t('Введите ваш e-mail.'),
             '#placeholder' => $this->t('example@gmail.com'),
+            '#default_value' => $user->getEmail(),
         );
         $form['tel'] = array(
             '#type' => 'tel',

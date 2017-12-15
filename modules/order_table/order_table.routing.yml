@@ -11,7 +11,7 @@ my_orders:
   path: '/my_orders'
   defaults:
     _title: 'Мои заявки'
-    _controller: '\Drupal\order_table\Controller\DbOrdersController::my_entryList'
+    _controller: '\Drupal\order_table\Controller\DbOrdersController::entryList'
   requirements:
     _permission: 'access content'
 
@@ -32,28 +32,3 @@ my_order_edit:
   requirements:
     _permission: 'access content'
 
-#
-#dbtng_list:
-#  path: '/order_table/list'
-#  defaults:
-#    _title: 'List'
-#    _controller: '\Drupal\order_table\Controller\DbOrdersController::entryList'
-#  requirements:
-#    _permission: 'access content'
-#
-#dbtng_add:
-#  path: '/order_table/add'
-#  defaults:
-#    _title: 'Add Entry'
-#    _form: '\Drupal\order_table\Form\DbOrdersAddForm'
-#  requirements:
-#    _permission: 'access content'
-#
-
-#dbtng_advanced:
-#  path: '/order_table/advanced'
-#  defaults:
-#    _title: 'Advanced List'
-#    _controller: '\Drupal\order_table\Controller\DbOrdersController::entryAdvancedList'
-#  requirements:
-#    _permission: 'access content'

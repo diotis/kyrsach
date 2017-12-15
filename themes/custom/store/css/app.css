@@ -38,7 +38,7 @@ html{
 }
 #edit-submit{
     margin-top: 20px;
-    width: 150px;
+    width: 170px;
 }
 
 .menu {
@@ -120,6 +120,8 @@ a{
 }
 .views-field-body-1{
     font-size: 115%;
+    width: 75%;
+    margin-top: 5px;
 }
 article[role='article'] section{
     margin-top: 40px;
@@ -143,10 +145,10 @@ article[role='article'] p{
 article[role='article'] img{
     margin: 20px;
 }
-article[role='article'] a{
+article[role='article'] a {
     margin: 10px;
 }
-article a{
+.js-comment a{
     display: none;
 }
 article .js-comment footer{
@@ -191,4 +193,25 @@ article[typeof="schema:Person"] div:nth-child(2){
     border-top: 2px solid grey;
     padding-top: 5px;
     padding-left: 10px;
+}
+#edit-mail--description{
+    display: none;
+}
+#edit-name--description{
+    display: none;
+}
+#edit-pass--description{
+    display: none;
+}
+#edit-user-picture-0-upload--description{
+    display: none;
+}
+#edit-contact{
+    display: none;
+}
+#edit-field-name-0-format-guidelines{
+    display: none;
+}
+.js-form-item{
+    margin: 7px;
 }

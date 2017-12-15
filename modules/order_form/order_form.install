@@ -6,7 +6,6 @@
  */
 function order_form_schema() {
 
-  # Database example
   $schema['order_form'] = array(                   // Название таблицы
     'description' => 'Orders database',            // Описание таблицы
     'fields' => array(                              // Массив с колонками таблицы
@@ -53,6 +52,10 @@ function order_form_schema() {
         'description' => 'clients phone',
         'type' => 'varchar',
         'length' => 45,
+      ),
+      'done' => array(
+        'description' => 'not done',
+        'type' => 'tiny',
       ),
       'user' => array(
         'description' => 'user id',
