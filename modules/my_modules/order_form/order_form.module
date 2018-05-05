@@ -1,0 +1,17 @@
+<?php
+
+function order_form_page_attachments(array &$attachments) {
+    if(\Drupal::request()->getRequestUri()=='/order') {
+        $attachments['#attached']['library'][] = 'order_form/order_form.ethereum_libs';
+        $attachments['#attached']['drupalSettings'][] = "qwe";
+    }
+}
+
+function order_form_theme() {
+    return [
+        'my_form' => [
+            'template' => 'order_form_template',
+            'render element' => 'my_form',
+        ],
+    ];
+}

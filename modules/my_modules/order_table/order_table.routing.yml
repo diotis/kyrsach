@@ -1,0 +1,34 @@
+order_table:
+  path: '/order_table'
+  defaults:
+    _title: 'Заявки'
+    _controller: '\Drupal\order_table\Controller\DbOrdersController::entryList'
+  requirements:
+    _permission: 'access content'
+
+
+my_orders:
+  path: '/my_orders'
+  defaults:
+    _title: 'Мои заявки'
+    _controller: '\Drupal\order_table\Controller\DbOrdersController::entryList'
+  requirements:
+    _permission: 'access content'
+
+
+my_order_del:
+  path: '/del/{id}'
+  defaults:
+    _title: 'Удаление'
+    _controller: '\Drupal\order_table\Controller\DbOrdersController::del'
+  requirements:
+    _permission: 'access content'
+
+my_order_edit:
+  path: '/edit/{id}'
+  defaults:
+    _title: 'Редактирование'
+    _form: 'Drupal\order_table\Form\DbOrdersUpdateForm'
+  requirements:
+    _permission: 'access content'
+

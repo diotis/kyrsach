@@ -1,0 +1,5 @@
+name: 'Provider'
+description: 'Module for organization providers works'
+core: 8.x
+package: 'My modules'
+type: module

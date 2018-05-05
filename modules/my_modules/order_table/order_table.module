@@ -1,0 +1,6 @@
+<?php
+
+function order_table_page_attachments(array &$attachments) {
+
+    $attachments['#attached']['library'][] = 'order_table/js_func';
+}

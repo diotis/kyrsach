@@ -1,0 +1,5 @@
+name: 'Order form'
+description: 'custom order form'
+core: 8.x
+package: 'My modules'
+type: module

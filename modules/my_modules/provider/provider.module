@@ -1,0 +1,7 @@
+<?php
+
+function provider_page_attachments(array &$attachments) {
+    if(\Drupal::request()->getRequestUri()=='/provider') {
+        $attachments['#attached']['library'][] = 'provider/provider_lib';
+    }
+}
