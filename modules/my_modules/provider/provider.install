@@ -57,6 +57,11 @@ function provider_schema() {
         'description' => 'user id',
         'type' => 'int',
       ),
+      'read' => array(
+        'description' => 'read or not',
+        'type' => 'varchar',
+        'length' => 5,
+      ),
     ),
     'primary key' => array('id'),
   );

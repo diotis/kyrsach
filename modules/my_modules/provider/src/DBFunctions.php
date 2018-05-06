@@ -21,31 +21,49 @@ class DBFunctions {
         return $return_value;
     }
 
-    public static function update(array $entry) {
+//    public static function update(array $entry) {
+//        try {
+//            $count = db_update('provider')
+//                ->fields($entry)
+//                ->condition('id', $entry['id'])
+//                ->execute();
+//        }
+//        catch (\Exception $e) {
+//            drupal_set_message(t('db_update failed. Message = %message, query= %query', [
+//                    '%message' => $e->getMessage(),
+//                    '%query' => $e->query_string,
+//                ]
+//            ), 'error');
+//        }
+//        return $count;
+//    }
+    public static function provider_funs($filed,$id){
+        $msg = "update id: ".$id;
+        $error = false;
         try {
-            $count = db_update('provider')
-                ->fields($entry)
-                ->condition('id', $entry['id'])
-                ->execute();
-        }
-        catch (\Exception $e) {
-            drupal_set_message(t('db_update failed. Message = %message, query= %query', [
+            db_query("UPDATE `wholesale_store`.`provider` SET ".$filed."='true' WHERE `id`=$id;");
+        } catch (\Exception $e) {
+            $msg = t('db_update failed. Message = %message, query= %query', [
                     '%message' => $e->getMessage(),
                     '%query' => $e->query_string,
                 ]
-            ), 'error');
+            );
+            $error = true;
         }
-        return $count;
+        return json_encode(array(
+            'data' => $msg,
+            'error' => $error,
+        ));
     }
-    public static function load_po_id(array $entry = []) {
-        $select = db_select('provider', 'orders');
-        $select->condition('user', \Drupal::currentUser()->id());
-        $select->fields('orders');
-        foreach ($entry as $field => $value) {
-            $select->condition($field, $value);
-        }
-        return $select->execute()->fetchAll();
-    }
+//    public static function load_po_id(array $entry = []) {
+//        $select = db_select('provider', 'orders');
+//        $select->condition('user', \Drupal::currentUser()->id());
+//        $select->fields('orders');
+//        foreach ($entry as $field => $value) {
+//            $select->condition($field, $value);
+//        }
+//        return $select->execute()->fetchAll();
+//    }
     public static function delete($id) {
         db_delete('provider')
             ->condition('id', $id)
@@ -53,7 +71,6 @@ class DBFunctions {
     }
     public static function load(array $entry = []) {
         $select = db_select('provider', 'orders');
-        dpm($select);
         $select->fields('orders');
         foreach ($entry as $field => $value) {
             $select->condition($field, $value);

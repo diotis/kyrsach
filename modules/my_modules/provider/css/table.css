@@ -1,3 +1,6 @@
+tbody tr[read="false"]{
+    background-color: #b388ff;
+}
 tbody tr:hover{
     background-color: #00e5ff;
 }

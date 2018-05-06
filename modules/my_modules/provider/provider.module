@@ -1,7 +1,23 @@
 <?php
 
 function provider_page_attachments(array &$attachments) {
-    if(\Drupal::request()->getRequestUri()=='/provider') {
-        $attachments['#attached']['library'][] = 'provider/provider_lib';
+    $url = \Drupal::request()->getRequestUri();
+    if($url=='/provider') {
+        $attachments['#attached']['library'][] = 'provider/provider_js';
     }
+    if($url=='/provider' || $url == '/refused') {
+        $attachments['#attached']['library'][] = 'provider/provider_css';
+        $attachments['#attached']['library'][] = 'provider/module_js';
+    }
+
+}
+function provider_theme() {
+    return [
+        'page__provider' => [
+            'template' => 'page--provider',
+        ],
+        'page__refused' => [
+            'template' => 'page--provider',
+        ],
+    ];
 }

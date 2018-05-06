@@ -14,55 +14,33 @@ use \Symfony\Component\HttpFoundation\Response;
 
 class MessageList extends ControllerBase
 {
-    public $isAdmin = false;
+    //public $isAdmin = false;
 
-    public function entryList()
-    {
-        $user = \Drupal::currentUser();
-        if ($user->isAuthenticated()) {
-            $user = $user->getRoles();
-            if (count($user) > 1) {
-                if ($user[1] == 'administrator') {
-                    $this->isAdmin = true;
-                }
-            }
-        }
+    public function get_incoming($bool){
+        if ($this->currentUser()->id() == '1') {
+            $entries = DBFunctions::load(['refused' => $bool ? 'true':'false']);
+        } else {
+        return $message['msg'] = array(
+            '#markup'=> 'Данную страницу могут просматривать только администраторы!',
+        );}
         $content = [];
-
-//        $content['need'] = [
-//            '#type' => 'select',
-//            '#title' => $this->t('Тип заявок: '),
-//            '#options' => [
-//                'all' => $this->t('Все'),
-//                'done' => $this->t('Выполненные'),
-//            ],
-//            '#empty_option' => $this->t('-select-'),
-//        ];
-
         $headers = ['№', t('Имя'), t('Фамилия'), t('Тема'), t('Сообщение'), t('email'), t('телефон'), t('функции')];
-        //if($isAdmin)array_unshift($headers,t(''));
         $null = "Заявок не найдено!";
-        if(\Drupal::currentUser()->getRoles()[0]!='authenticated')
-            $null.=" Вы должны быть зарегистрированы в системе.";
+
         $content['table'] = [
             '#type' => 'table',
             '#header' => $headers,
             '#empty' => t($null),
         ];
-        if ($this->isAdmin) {
-            $entries = DBFunctions::load();
-        } else {
-            $entries = DBFunctions::load_po_id();
-        }
 
         for ($i = 0; $i < count($entries); $i++) {
 
-//            if ($isAdmin) {
-//                $content['table'][$i]['done'] = [
-//                    '#type' => 'checkboxes',
-//                    '#options' => ['SAT' => t('SAT'), 'ACT' => t('ACT')],
-//                ];
-//            }
+            $content['table'][$i] = array(
+                '#attributes' => array(
+                    'read' => $entries[$i]->read,
+                ),
+            );
+
             $content['table'][$i]['number'] = array(
                 '#markup' => ($i+1),
             );
@@ -84,48 +62,74 @@ class MessageList extends ControllerBase
             $content['table'][$i]['tel'] = array(
                 '#markup' => $this->t($entries[$i]->tel),
             );
-            $content['table'][$i]['select'] = [
-                '#type' => 'select',
-                '#options' => [
-                    t('- Выбор действие -'),
-                    'confirm' => $this
-                        ->t('Заключить сделку'),
-                    'hide' => $this
-                        ->t('Пометить как прочитанное'),
-                    'refuse' => $this
-                        ->t('Отказать'),
 
-                ],
-                '#attributes' => array('id' => 'move', 'data' => $i),
-            ];
+            if($bool){
+
+            }else {
+                $content['table'][$i]['select'] = [
+                    '#type' => 'select',
+                    '#options' => [
+                        t('- Выбор действие -'),
+                        'confirm' => $this
+                            ->t('Заключить сделку'),
+                        'hide' => $this
+                            ->t('Пометить как прочитанное'),
+                        'refuse' => $this
+                            ->t('Отказать'),
+
+                    ],
+                    '#attributes' => array('id' => 'move', 'data' => $entries[$i]->id),
+                ];
+            }
+
         }
         $content['#cache']['max-age'] = 0;
         return $content;
     }
 
-    public
-    function del($id)
-    {
-        $user = \Drupal::currentUser()->getRoles();
-        if ($user[0] == 'authenticated') {
-            $entries = null;
-            if (count($user) > 1) {
-                if ($user[1] == 'administrator') {
-                    $entries = DBFunctions::load();
-                    $this->isAdmin = true;
-                }
-            } else {
-                $entries = DBFunctions::load_po_id();
-            }
-            DBFunctions::delete($entries[$id]->id);
-            $build = array(
-                '#type' => 'markup',
-                '#markup' => t($id),
-            );
-        }
-        return new Response(render($build));
+    public function provider(){
+        return $this->get_incoming(false);
+    }
+    public function refused(){
+        return $this->get_incoming(true);
     }
 
-
+//    public function del($id)
+//    {
+//        $user = \Drupal::currentUser()->getRoles();
+//        if ($user[0] == 'authenticated') {
+//            $entries = null;
+//            if (count($user) > 1) {
+//                if ($user[1] == 'administrator') {
+//                    $entries = DBFunctions::load();
+//                    $this->isAdmin = true;
+//                }
+//            } else {
+//                $entries = DBFunctions::load_po_id();
+//            }
+//            DBFunctions::delete($entries[$id]->id);
+//            $build = array(
+//                '#type' => 'markup',
+//                '#markup' => t($id),
+//            );
+//        }
+//        return new Response(render($build));
+//    }
+    public function hide($id){
+        $msg = DBFunctions::provider_funs('`read`',$id);
+        $build = array(
+            '#type' => 'markup',
+            '#markup' => $msg,
+        );
+        return new Response(render($build));
+    }
+    public function refuse($id){
+        $msg = DBFunctions::provider_funs('`refused`',$id);
+        $build = array(
+            '#type' => 'markup',
+            '#markup' => $msg,
+        );
+        return new Response(render($build));
+    }
 }
 

@@ -1,9 +1,19 @@
-provider_lib:
+module_js:
   version: 1.x
   js:
     js/script.js: {}
+  dependencies:
+    - core/jquery
+
+provider_js:
+  version: 1.x
+  js:
+    js/provider.js: {}
+  dependencies:
+    - core/jquery
+
+provider_css:
+  version: 1.x
   css:
     theme:
       css/table.css: {}
-  dependencies:
-    - core/jquery
