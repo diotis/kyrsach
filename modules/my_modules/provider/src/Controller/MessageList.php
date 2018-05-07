@@ -6,11 +6,11 @@
  * Time: 19:40
  */
 
-namespace Drupal\provider\Controller;
+    namespace Drupal\provider\Controller;
 
-use Drupal\Core\Controller\ControllerBase;
-use Drupal\provider\DBFunctions;
-use \Symfony\Component\HttpFoundation\Response;
+    use Drupal\Core\Controller\ControllerBase;
+    use Drupal\provider\DBFunctions;
+    use \Symfony\Component\HttpFoundation\Response;
 
 class MessageList extends ControllerBase
 {
@@ -32,14 +32,7 @@ class MessageList extends ControllerBase
             '#header' => $headers,
             '#empty' => t($null),
         ];
-
         for ($i = 0; $i < count($entries); $i++) {
-
-            $content['table'][$i] = array(
-                '#attributes' => array(
-                    'read' => $entries[$i]->read,
-                ),
-            );
 
             $content['table'][$i]['number'] = array(
                 '#markup' => ($i+1),
@@ -64,19 +57,31 @@ class MessageList extends ControllerBase
             );
 
             if($bool){
-
-            }else {
                 $content['table'][$i]['select'] = [
                     '#type' => 'select',
                     '#options' => [
-                        t('- Выбор действие -'),
+                        t('- Выбор действия -'),
+                        'delete_provider' => $this
+                            ->t('Удалить'),
+                        'reestablish' => $this
+                            ->t('Восстановить'),
+                    ],
+                    '#attributes' => array('id' => 'move', 'data' => $entries[$i]->id),
+                ];
+
+            }else {
+                $content['table'][$i]['#attributes'] = array(
+                        'read' => $entries[$i]->read);
+                $content['table'][$i]['select'] = [
+                    '#type' => 'select',
+                    '#options' => [
+                        t('- Выбор действия -'),
                         'confirm' => $this
                             ->t('Заключить сделку'),
                         'hide' => $this
                             ->t('Пометить как прочитанное'),
                         'refuse' => $this
                             ->t('Отказать'),
-
                     ],
                     '#attributes' => array('id' => 'move', 'data' => $entries[$i]->id),
                 ];
@@ -115,16 +120,20 @@ class MessageList extends ControllerBase
 //        }
 //        return new Response(render($build));
 //    }
+
+    public function delete_provider($id){
+        return $this->build(DBFunctions::delete($id));
+    }
+    public function reestablish($id){
+        return $this->build(DBFunctions::provider_funs('`refused`',"'false'",$id));
+    }
     public function hide($id){
-        $msg = DBFunctions::provider_funs('`read`',$id);
-        $build = array(
-            '#type' => 'markup',
-            '#markup' => $msg,
-        );
-        return new Response(render($build));
+        return $this->build(DBFunctions::provider_funs('`read`',"'true'",$id));
     }
     public function refuse($id){
-        $msg = DBFunctions::provider_funs('`refused`',$id);
+        return $this->build(DBFunctions::provider_funs('`refused`',"'true'",$id));
+    }
+    private function build($msg){
         $build = array(
             '#type' => 'markup',
             '#markup' => $msg,

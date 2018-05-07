@@ -12,6 +12,13 @@ provider_js:
   dependencies:
     - core/jquery
 
+refuse_js:
+  version: 1.x
+  js:
+    js/refused.js: {}
+  dependencies:
+    - core/jquery
+
 provider_css:
   version: 1.x
   css:

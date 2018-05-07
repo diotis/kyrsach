@@ -2,32 +2,6 @@
     Drupal.behaviors.Provider = {
         attach: function (context) {
             $(document).ready(function () {
-                var tbody = Array.from(document.getElementById('table').children[1].children);
-                tbody.forEach(function (item,i,arr) {
-                    item.setAttribute('mod','closed');
-                    if(item.children.length<2) return;
-                    var msg = item.children[4].innerHTML;
-                    if(msg.length>27){
-                        item.children[4].innerHTML = null;
-                        item.children[4].innerHTML = '<div id='+`short-${i}`+'>'+msg.substring(0,27)+'...</div>'+'<div id='+`long-${i}`+'>'+msg+'</div>';
-                        $(`#long-${i}`).hide();
-                    }
-                });
-                $('tr').bind('click', function(){
-                    if(event.target.tagName!="SELECT") {
-                        var i = this.children[0].innerHTML - 1;
-                        if(this.getAttribute('mod')=='closed') {
-                            $(`#long-${i}`).show();
-                            $(`#short-${i}`).hide();
-                            this.setAttribute('mod', 'open');
-                        }else{
-                            $(`#long-${i}`).hide();
-                            $(`#short-${i}`).show();
-                            this.setAttribute('mod', 'closed');
-                        }
-                        console.log(i+1, this.getAttribute('mod'));
-                    }
-                });
 
                 $("select").change(function(){
                     var tr = $(this).parent().parent().parent();

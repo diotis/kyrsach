@@ -3,7 +3,6 @@
 namespace Drupal\provider;
 
 class DBFunctions {
-
     public static function insert(array $entry) {
         $return_value = NULL;
         try {
@@ -37,15 +36,14 @@ class DBFunctions {
 //        }
 //        return $count;
 //    }
-    public static function provider_funs($filed,$id){
-        $msg = "update id: ".$id;
+    public static function provider_funs($filed1,$field2,$id){
         $error = false;
+        $msg = "update id: ".$id;
         try {
-            db_query("UPDATE `wholesale_store`.`provider` SET ".$filed."='true' WHERE `id`=$id;");
+            db_query("UPDATE `wholesale_store`.`provider` SET ".$filed1."=$field2 WHERE `id`=$id;");
         } catch (\Exception $e) {
-            $msg = t('db_update failed. Message = %message, query= %query', [
+            $msg = t('db_update failed. Message = %message', [
                     '%message' => $e->getMessage(),
-                    '%query' => $e->query_string,
                 ]
             );
             $error = true;
@@ -65,9 +63,23 @@ class DBFunctions {
 //        return $select->execute()->fetchAll();
 //    }
     public static function delete($id) {
-        db_delete('provider')
-            ->condition('id', $id)
-            ->execute();
+        $error = false;
+        $msg = "delete id: ".$id;
+        try {
+            db_delete('provider')
+                ->condition('id', $id)
+                ->execute();
+        } catch (\Exception $e) {
+            $msg = t('db_delete failed. Message = %message', [
+                    '%message' => $e->getMessage(),
+                ]
+            );
+            $error = true;
+        }
+        return json_encode(array(
+            'data' => $msg,
+            'error' => $error,
+        ));
     }
     public static function load(array $entry = []) {
         $select = db_select('provider', 'orders');

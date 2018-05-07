@@ -31,6 +31,7 @@ provider_refuse:
   requirements:
     _permission: 'access content'
 
+
 provider_refused:
   path: '/refused'
   defaults:
@@ -38,28 +39,26 @@ provider_refused:
   requirements:
     _permission: 'access content'
 
-#
-#my_orders:
-#  path: '/my_orders'
-#  defaults:
-#    _title: 'Мои заявки'
-#    _controller: '\Drupal\order_table\Controller\DbOrdersController::entryList'
-#  requirements:
-#    _permission: 'access content'
-#
-#
-#my_order_del:
-#  path: '/del/{id}'
-#  defaults:
-#    _title: 'Удаление'
-#    _controller: '\Drupal\order_table\Controller\DbOrdersController::del'
-#  requirements:
-#    _permission: 'access content'
-#
-#my_order_edit:
-#  path: '/edit/{id}'
-#  defaults:
-#    _title: 'Редактирование'
-#    _form: 'Drupal\order_table\Form\DbOrdersUpdateForm'
-#  requirements:
-#    _permission: 'access content'
+
+provider_delete_provider:
+  path: '/delete_provider/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\MessageList::delete_provider'
+  requirements:
+    _permission: 'access content'
+
+
+provider_reestablish:
+  path: '/reestablish/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\MessageList::reestablish'
+  requirements:
+    _permission: 'access content'
+
+
+provider_create_contract:
+  path: '/contract/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\Contract::CreateContract'
+  requirements:
+    _permission: 'access content'
