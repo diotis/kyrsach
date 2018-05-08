@@ -1,0 +1,13 @@
+.container_contract{
+    display: inline-block;
+    width: 100%;
+}
+.contract_from,.contract_to{
+    display: inline-block;
+    width: 49%;
+    vertical-align: top;
+}
+.contract_from{
+}
+.contract_to{
+}

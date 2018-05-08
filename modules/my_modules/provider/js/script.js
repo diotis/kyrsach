@@ -14,10 +14,10 @@
                 tbody.forEach(function (item,i,arr) {
                     item.setAttribute('mod','closed');
                     if(item.children.length<2) return;
-                    var msg = item.children[4].innerHTML;
+                    var msg = item.children[3].innerHTML;
                     if(msg.length>27){
-                        item.children[4].innerHTML = null;
-                        item.children[4].innerHTML = '<div id='+`short-${i}`+'>'+msg.substring(0,27)+'...</div>'+'<div id='+`long-${i}`+'>'+msg+'</div>';
+                        item.children[3].innerHTML = null;
+                        item.children[3].innerHTML = '<div id='+`short-${i}`+'>'+msg.substring(0,27)+'...</div>'+'<div id='+`long-${i}`+'>'+msg+'</div>';
                         $(`#long-${i}`).hide();
                     }
                 });

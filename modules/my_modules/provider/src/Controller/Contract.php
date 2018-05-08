@@ -2,83 +2,64 @@
 /**
  * Created by PhpStorm.
  * User: user
- * Date: 07.05.2018
- * Time: 15:59
+ * Date: 08.05.2018
+ * Time: 19:40
  */
 
 namespace Drupal\provider\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\provider\DBFunctions;
+use \Symfony\Component\HttpFoundation\Response;
 
 class Contract extends ControllerBase{
-
-    public function CreateContract($id){
-
-        $form_class = 'Drupal\provider\Form\ContractForm';
-        $parameter = 'contract_form';
-
-        $entry = DBFunctions::load(['id'=>$id])[0];
+    public function getContract($id){
+        $entry = DBFunctions::load('contract',['id'=>$id])[0];
+        //проверка на state
         $content = [
             'custom' => [
                 '#type' => 'container',
-                '#attributes' => array('class' => 'container_contract'),
+                '#attributes' => array('class' => 'contract_container'),
                 'inside' => [
-                    'from'=>[
+                    'contract'=>[
                         '#type'=>'container',
-                        '#attributes' => array('class' => 'contract_from'),
+                        '#attributes' => array('class' => 'contract'),
                         'inside'=>[
-                            'first_name' =>array(
-                                '#type' => 'textfield',
-                                '#title' => $this
-                                    ->t('Name'),
-                                '#value' => $entry->name,
-                            ),
-                            'last_name' =>array(
-                                '#type' => 'textfield',
-                                '#title' => $this
-                                    ->t('LastName'),
-                                '#value' => $entry->last_name
-                            ),
                             'subject' =>array(
                                 '#type' => 'textfield',
                                 '#title' => $this
-                                    ->t('Subject'),
-                                '#value' => $entry->subject
+                                    ->t('Заголовок'),
+                                '#value' => $entry->caption,
+                                '#attributes' => array('disabled' => 'disabled')
                             ),
                             'message' =>array(
                                 '#type' => 'textarea',
                                 '#title' => $this
-                                    ->t('Message'),
-                                '#value' => $entry->message
-                            ),
-                            'email' =>array(
-                                '#type' => 'textfield',
-                                '#title' => $this
-                                    ->t('Email'),
-                                '#value' => $entry->email
-                            ),
-                            'tel' =>array(
-                                '#type' => 'textfield',
-                                '#title' => $this
-                                    ->t('Tel'),
-                                '#value' => $entry->tel
+                                    ->t('Содержание'),
+                                '#value' => $entry->data,
+                                '#attributes' => array('disabled' => 'disabled')
                             ),
                         ]
                     ],
-                    'to'=>[
+                    'chat'=>[
                         '#type'=>'container',
-                        '#attributes' => array('class' => 'contract_to'),
+                        '#attributes' => array('class' => 'chat'),
                         'inside'=>[
-                            'form' => $this->formBuilder()->getForm($form_class, $parameter),
+                            'list' =>[
+                                '#type'=>'container',
+                                '#attributes' => array('class' => 'chat_list'),
+                                'inside'=>[]//добавить загрузку чата
+                            ],
+                            'message' =>[
+                                '#type'=>'container',
+                                '#attributes' => array('class' => 'chat_input'),
+                                'inside'=>[]
+                            ],
                         ]
                     ],
                 ],
             ],
-
         ];
-
         return $content;
     }
-
 }

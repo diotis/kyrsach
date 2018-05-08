@@ -1,5 +1,5 @@
 provider.provider:
-  path: '/provider/create'
+  path: '/create_sentence'
   defaults:
     _form:  '\Drupal\provider\Form\ProviderAdd'
     _title: 'Оформить заказ'
@@ -57,8 +57,50 @@ provider_reestablish:
 
 
 provider_create_contract:
+  path: '/contract_create/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\Creating::CreateContract'
+  requirements:
+    _permission: 'access content'
+
+provider_contract_list:
+  path: '/contracts'
+  defaults:
+    _title: 'Новые контракты'
+    _controller: '\Drupal\provider\Controller\ContractList::getNewContracts'
+  requirements:
+    _permission: 'access content'
+provider_contract_list_work:
+  path: '/contracts/in_work'
+  defaults:
+    _title: 'Подтвержденные контракты'
+    _controller: '\Drupal\provider\Controller\ContractList::getConfirmedContracts'
+  requirements:
+    _permission: 'access content'
+provider_contract_deferred:
+  path: '/contracts/deferred'
+  defaults:
+    _title: 'Отложенные'
+    _controller: '\Drupal\provider\Controller\ContractList::getDeferredContracts'
+  requirements:
+    _permission: 'access content'
+provider_contract_refused:
+  path: '/contracts/refused'
+  defaults:
+    _title: 'Отказанные'
+    _controller: '\Drupal\provider\Controller\ContractList::getRefusedContracts'
+  requirements:
+    _permission: 'access content'
+provider_contract_executed:
+  path: '/contracts/executed'
+  defaults:
+    _title: 'Завершенные'
+    _controller: '\Drupal\provider\Controller\ContractList::getExecutedContracts'
+  requirements:
+    _permission: 'access content'
+provider_contract:
   path: '/contract/{id}'
   defaults:
-    _controller: '\Drupal\provider\Controller\Contract::CreateContract'
+    _controller: '\Drupal\provider\Controller\Contract::getContract'
   requirements:
     _permission: 'access content'

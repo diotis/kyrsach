@@ -81,8 +81,8 @@ class DBFunctions {
             'error' => $error,
         ));
     }
-    public static function load(array $entry = []) {
-        $select = db_select('provider', 'orders');
+    public static function load($table, array $entry = []) {
+        $select = db_select($table, 'orders');
         $select->fields('orders');
         foreach ($entry as $field => $value) {
             $select->condition($field, $value);

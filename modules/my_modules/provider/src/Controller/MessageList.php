@@ -14,17 +14,15 @@
 
 class MessageList extends ControllerBase
 {
-    //public $isAdmin = false;
-
     public function get_incoming($bool){
         if ($this->currentUser()->id() == '1') {
-            $entries = DBFunctions::load(['refused' => $bool ? 'true':'false']);
+            $entries = DBFunctions::load('provider',['refused_state' => $bool ? 'true':'false']);
         } else {
         return $message['msg'] = array(
             '#markup'=> 'Данную страницу могут просматривать только администраторы!',
         );}
         $content = [];
-        $headers = ['№', t('Имя'), t('Фамилия'), t('Тема'), t('Сообщение'), t('email'), t('телефон'), t('функции')];
+        $headers = ['№', t('Дата'), t('Тема'), t('Сообщение'),t('Пользователь'),t('Функции')];
         $null = "Заявок не найдено!";
 
         $content['table'] = [
@@ -37,11 +35,8 @@ class MessageList extends ControllerBase
             $content['table'][$i]['number'] = array(
                 '#markup' => ($i+1),
             );
-            $content['table'][$i]['name'] = array(
-                '#markup' => $this->t($entries[$i]->name),
-            );
-            $content['table'][$i]['last_name'] = array(
-                '#markup' => $this->t($entries[$i]->last_name),
+            $content['table'][$i]['date'] = array(
+                '#markup' => $entries[$i]->date,
             );
             $content['table'][$i]['subject'] = array(
                 '#markup' => $this->t($entries[$i]->subject),
@@ -49,13 +44,9 @@ class MessageList extends ControllerBase
             $content['table'][$i]['message'] = array(
                 '#markup' => $this->t($entries[$i]->message),
             );
-            $content['table'][$i]['email'] = array(
-                '#markup' => $this->t($entries[$i]->email),
+            $content['table'][$i]['user'] = array(
+                '#markup' => $this->t($entries[$i]->user),
             );
-            $content['table'][$i]['tel'] = array(
-                '#markup' => $this->t($entries[$i]->tel),
-            );
-
             if($bool){
                 $content['table'][$i]['select'] = [
                     '#type' => 'select',
@@ -71,7 +62,7 @@ class MessageList extends ControllerBase
 
             }else {
                 $content['table'][$i]['#attributes'] = array(
-                        'read' => $entries[$i]->read);
+                        'read' => $entries[$i]->read_state);
                 $content['table'][$i]['select'] = [
                     '#type' => 'select',
                     '#options' => [
@@ -98,40 +89,17 @@ class MessageList extends ControllerBase
     public function refused(){
         return $this->get_incoming(true);
     }
-
-//    public function del($id)
-//    {
-//        $user = \Drupal::currentUser()->getRoles();
-//        if ($user[0] == 'authenticated') {
-//            $entries = null;
-//            if (count($user) > 1) {
-//                if ($user[1] == 'administrator') {
-//                    $entries = DBFunctions::load();
-//                    $this->isAdmin = true;
-//                }
-//            } else {
-//                $entries = DBFunctions::load_po_id();
-//            }
-//            DBFunctions::delete($entries[$id]->id);
-//            $build = array(
-//                '#type' => 'markup',
-//                '#markup' => t($id),
-//            );
-//        }
-//        return new Response(render($build));
-//    }
-
     public function delete_provider($id){
         return $this->build(DBFunctions::delete($id));
     }
     public function reestablish($id){
-        return $this->build(DBFunctions::provider_funs('`refused`',"'false'",$id));
+        return $this->build(DBFunctions::provider_funs('`refused_state`',"'false'",$id));
     }
     public function hide($id){
-        return $this->build(DBFunctions::provider_funs('`read`',"'true'",$id));
+        return $this->build(DBFunctions::provider_funs('`read_state`',"'true'",$id));
     }
     public function refuse($id){
-        return $this->build(DBFunctions::provider_funs('`refused`',"'true'",$id));
+        return $this->build(DBFunctions::provider_funs('`refused_state`',"'true'",$id));
     }
     private function build($msg){
         $build = array(

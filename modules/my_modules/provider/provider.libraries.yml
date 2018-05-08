@@ -19,8 +19,32 @@ refuse_js:
   dependencies:
     - core/jquery
 
+create_js:
+  version: 1.x
+  js:
+    js/creating.js: {}
+  dependencies:
+    - core/jquery
+
 provider_css:
   version: 1.x
   css:
     theme:
       css/table.css: {}
+
+create_css:
+  version: 1.x
+  css:
+    theme:
+      css/creating.css: {}
+
+
+contract:
+  version: 1.x
+  js:
+    js/creating.js: {}
+  dependencies:
+    - core/jquery
+  css:
+    theme:
+      css/contract.css: {}
