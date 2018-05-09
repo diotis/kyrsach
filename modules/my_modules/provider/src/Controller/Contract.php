@@ -47,13 +47,24 @@ class Contract extends ControllerBase{
                         'inside'=>[
                             'list' =>[
                                 '#type'=>'container',
-                                '#attributes' => array('class' => 'chat_list'),
+                                '#attributes' => array('class' => 'chat_list',
+                                    'id'=>'chat'),
                                 'inside'=>[]//добавить загрузку чата
                             ],
                             'message' =>[
                                 '#type'=>'container',
                                 '#attributes' => array('class' => 'chat_input'),
-                                'inside'=>[]
+                                'inside'=>[
+                                    'textarea'=>[
+                                        '#type' => 'textarea',
+                                        '#value' =>"",
+                                        '#attributes' => array('id' => 'chat_text')
+                                    ],
+                                    'button'=>[
+                                        '#type' => 'submit',
+                                        '#attributes' => array('id' => 'chat_btn')
+                                    ]
+                                ]
                             ],
                         ]
                     ],

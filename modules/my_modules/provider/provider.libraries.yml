@@ -42,7 +42,7 @@ create_css:
 contract:
   version: 1.x
   js:
-    js/creating.js: {}
+    js/contract.js: {}
   dependencies:
     - core/jquery
   css:

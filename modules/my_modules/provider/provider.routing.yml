@@ -104,3 +104,21 @@ provider_contract:
     _controller: '\Drupal\provider\Controller\Contract::getContract'
   requirements:
     _permission: 'access content'
+contract_chat:
+  path: '/chat/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\Chat::start'
+  requirements:
+    _permission: 'access content'
+contract_chat_add:
+  path: '/chat/add/{id}/{message}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\Chat::add'
+  requirements:
+    _permission: 'access content'
+contract_chat_update:
+  path: '/chat/update/{id}/{last}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\Chat::update'
+  requirements:
+    _permission: 'access content'

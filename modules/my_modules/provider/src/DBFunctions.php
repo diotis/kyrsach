@@ -3,6 +3,14 @@
 namespace Drupal\provider;
 
 class DBFunctions {
+
+//    public static function toJSON($msg, $error){
+//        return json_encode(array(
+//            'data' => $msg,
+//            'error' => $error,
+//        ));
+//    }
+
     public static function insert(array $entry) {
         $return_value = NULL;
         try {
@@ -19,7 +27,24 @@ class DBFunctions {
         }
         return $return_value;
     }
-
+    public static function add($table,array $entry) {
+        $error = false;
+        $msg = "update id: ".$id;
+        try {
+            db_insert($table)->fields($entry)->execute();
+        }
+        catch (\Exception $e) {
+            $msg = t('db_insert failed. Message = %message', [
+                    '%message' => $e->getMessage(),
+                ]
+            );
+            $error = true;
+        }
+        return json_encode(array(
+            'data' => $msg,
+            'error' => $error,
+        ));
+    }
 //    public static function update(array $entry) {
 //        try {
 //            $count = db_update('provider')
@@ -90,5 +115,11 @@ class DBFunctions {
         return $select->execute()->fetchAll();
     }
 
-
+    public static function chat($id,$last){
+        $select = db_select('chat','orders');
+        $select->fields('orders');
+        $select->condition('contract_id', $id);
+        $select->where('id > :last', [':last' => $last]);
+        return $select->execute()->fetchAll();
+    }
 }
