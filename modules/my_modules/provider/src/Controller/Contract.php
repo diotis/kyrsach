@@ -49,7 +49,7 @@ class Contract extends ControllerBase{
                                 '#type'=>'container',
                                 '#attributes' => array('class' => 'chat_list',
                                     'id'=>'chat'),
-                                'inside'=>[]//добавить загрузку чата
+                                'inside'=>[]
                             ],
                             'message' =>[
                                 '#type'=>'container',

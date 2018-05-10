@@ -48,3 +48,18 @@ contract:
   css:
     theme:
       css/contract.css: {}
+
+contracts_js:
+  version: 1.x
+  js:
+    js/contracts.js: {}
+  dependencies:
+    - core/jquery
+
+
+user_contracts:
+  version: 1.x
+  js:
+    js/user.js: {}
+  dependencies:
+    - core/jquery

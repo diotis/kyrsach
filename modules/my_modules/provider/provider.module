@@ -12,14 +12,19 @@ function provider_page_attachments(array &$attachments) {
     if($url=='/refused') {
         $attachments['#attached']['library'][] = 'provider/refuse_js';
     }
-    if (substr($url,0,-1)=='/contract_create/'){
+    if (!(stristr($url, '/contract_create/') === FALSE)){
         $attachments['#attached']['library'][] = 'provider/create_css';
         $attachments['#attached']['library'][] = 'provider/create_js';
     }
-    if (substr($url,0,-1)=='/contract/'){
+    if (!(stristr($url, '/contract/') === FALSE)){
         $attachments['#attached']['library'][] = 'provider/contract';
     }
-
+    if (!(stristr($url, '/contracts') === FALSE)){
+        $attachments['#attached']['library'][] = 'provider/contracts_js';
+    }
+    if($url=='/user/proposed' || $url=='/user/confirmed' || $url=='/user/executed') {
+        $attachments['#attached']['library'][] = 'provider/user_contracts';
+    }
 }
 function provider_theme() {
     return [
@@ -31,6 +36,15 @@ function provider_theme() {
         ],
         'page__contracts' => [
             'template' => 'page--contracts',
+        ],
+        'page__user__proposed' => [
+            'template' => 'page--user-contracts',
+        ],
+        'page__user__confirmed' => [
+            'template' => 'page--user-contracts',
+        ],
+        'page__user__executed' => [
+            'template' => 'page--user-contracts',
         ],
     ];
 }

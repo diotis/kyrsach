@@ -29,7 +29,7 @@ class DBFunctions {
     }
     public static function add($table,array $entry) {
         $error = false;
-        $msg = "update id: ".$id;
+        $msg = "add";
         try {
             db_insert($table)->fields($entry)->execute();
         }
@@ -45,22 +45,27 @@ class DBFunctions {
             'error' => $error,
         ));
     }
-//    public static function update(array $entry) {
-//        try {
-//            $count = db_update('provider')
-//                ->fields($entry)
-//                ->condition('id', $entry['id'])
-//                ->execute();
-//        }
-//        catch (\Exception $e) {
-//            drupal_set_message(t('db_update failed. Message = %message, query= %query', [
-//                    '%message' => $e->getMessage(),
-//                    '%query' => $e->query_string,
-//                ]
-//            ), 'error');
-//        }
-//        return $count;
-//    }
+    public static function update($table, $id, array $fields) {
+        $msg = 'update';
+        $error = false;
+
+        try {
+            $query = \Drupal::database()->update($table);
+            $query->fields($fields);
+            $query->condition('id', $id);
+            $query->execute();
+        }
+        catch (\Exception $e) {
+            $msg = t('db_update failed. Message = %message', [
+                    '%message' => $e->getMessage()
+                ]);
+            $error= true;
+        }
+        return json_encode(array(
+            'data' => $msg,
+            'error' => $error,
+        ));
+    }
     public static function provider_funs($filed1,$field2,$id){
         $error = false;
         $msg = "update id: ".$id;

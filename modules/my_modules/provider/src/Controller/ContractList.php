@@ -13,9 +13,16 @@ use Drupal\provider\DBFunctions;
 use \Symfony\Component\HttpFoundation\Response;
 
 class ContractList extends ControllerBase{
-
-    public function getContracts(array $conditions = []){
+    private function build($msg){
+        $build = array(
+            '#type' => 'markup',
+            '#markup' => $msg,
+        );
+        return new Response(render($build));
+    }
+    public static function getContracts(array $conditions = []){
         $entries = DBFunctions::load('contract', $conditions);
+        //перевернуть массив
         $content = [];
         $headers = ['№', t('Дата'), t('Заголовок'), t('Пользователь'), t('Функции')];
         $null = "Контрактов не найдено!";
@@ -25,33 +32,65 @@ class ContractList extends ControllerBase{
             '#empty' => t($null),
         ];
         for ($i = 0; $i < count($entries); $i++) {
-
+            $attr = array('id' => 'actions', 'data' => $entries[$i]->id);
+            $user = user_load($entries[$i]->user_id);
+            $user_label = $user->field_name->value . ' ' . $user->field_familia->value;
             $content['table'][$i]['number'] = array(
-                '#markup' => ($i+1),
+                '#markup' => ($i + 1),
             );
             $content['table'][$i]['date'] = array(
-                '#markup' => $this->t($entries[$i]->date),
+                '#markup' => $entries[$i]->date,
             );
             $content['table'][$i]['caption'] = array(
-                '#markup' => $this->t($entries[$i]->caption),
+                '#markup' => $entries[$i]->caption,
             );
             $content['table'][$i]['user_id'] = array(
-                '#markup' => $this->t($entries[$i]->user_id),
+                '#markup' => $user_label,
             );
+
+
             if ($conditions['state'] == 'new')
-            $content['table'][$i]['select'] = [
-                '#type' => 'select',
-                '#options' => [
-                    t('- Выбор действия -'),
-                    'later' => $this
-                        ->t('Отложить'),
-                    'offer' => $this
-                        ->t('Предложить'),
-                    'refuse' => $this
-                        ->t('Отказаться'),
-                ],
-                '#attributes' => array('id' => 'actions', 'data' => $entries[$i]->id),
-            ];
+                $content['table'][$i]['select'] = [
+                    '#type' => 'select',
+                    '#options' => [
+                        t('- Выбор действия -'),
+                        'later' => 'Отложить',
+                        'offer' => 'Предложить',
+                        'refuse' => 'Отказать',
+                    ],
+                    '#attributes' => $attr,
+                ];
+            else if ($conditions['state'] == 'proposed')
+                $content['table'][$i]['select'] = [
+                    '#type' => 'select',
+                    '#options' => [
+                        t('- Выбор действия -'),
+                        'cancel' => 'Отмена',
+                    ],
+                    '#attributes' => $attr,
+                ];
+            else if ($conditions['state'] == 'deferred')
+                $content['table'][$i]['select'] = [
+                    '#type' => 'select',
+                    '#options' => [
+                        t('- Выбор действия -'),
+                        'offer' => 'Предложить',
+                        'refuse' => 'Отказать',
+                    ],
+                    '#attributes' => $attr,
+                ];
+            else if ($conditions['state'] == 'refused')
+                $content['table'][$i]['select'] = [
+                    '#type' => 'select',
+                    '#options' => [
+                        t('- Выбор действия -'),
+                        'later' => 'Восстановить',
+                    ],
+                    '#attributes' => $attr,
+                ];
+
+
+            $content['table'][$i]['#attributes'] = ['user_id' => $entries[$i]->user_id];
         }
         $content['#cache']['max-age'] = 0;
         return $content;
@@ -60,6 +99,10 @@ class ContractList extends ControllerBase{
     //Новые контракты
     public function getNewContracts(){
         return $this->getContracts(['state'=>'new']);
+    }
+    //Предложенные контракты
+    public function getProposedContracts(){
+        return $this->getContracts(['state'=>'proposed']);
     }
     //Отложенные контракты
     public function getDeferredContracts(){
@@ -76,6 +119,18 @@ class ContractList extends ControllerBase{
     //Завершенные
     public function getExecutedContracts(){
         return $this->getContracts(['state'=>'executed']);
+    }
+    //Отложить или Отмена предложенного
+    public function later($id){
+        return $this->build(DBFunctions::update('contract',$id,['state'=>'deferred']));
+    }
+    //Предложить
+    public function propose($id){
+        return $this->build(DBFunctions::update('contract',$id,['state'=>'proposed']));
+    }
+    //Отказаться
+    public function refuse($id){
+        return $this->build(DBFunctions::update('contract',$id,['state'=>'refused']));
     }
 
 }

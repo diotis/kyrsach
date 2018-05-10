@@ -70,6 +70,31 @@ provider_contract_list:
     _controller: '\Drupal\provider\Controller\ContractList::getNewContracts'
   requirements:
     _permission: 'access content'
+provider_contract_new:
+  path: '/contracts/new'
+  defaults:
+    _title: 'Новые контракты'
+    _controller: '\Drupal\provider\Controller\ContractList::getNewContracts'
+  requirements:
+    _permission: 'access content'
+provider_contract_query_defer:
+  path: '/contracts/new/later/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\ContractList::later'
+  requirements:
+    _permission: 'access content'
+provider_contract_query_propose:
+  path: '/contracts/new/offer/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\ContractList::propose'
+  requirements:
+    _permission: 'access content'
+provider_contract_query_refuse:
+  path: '/contracts/new/refuse/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\ContractList::refuse'
+  requirements:
+    _permission: 'access content'
 provider_contract_list_work:
   path: '/contracts/in_work'
   defaults:
@@ -98,6 +123,13 @@ provider_contract_executed:
     _controller: '\Drupal\provider\Controller\ContractList::getExecutedContracts'
   requirements:
     _permission: 'access content'
+provider_contract_proposed:
+  path: '/contracts/proposed'
+  defaults:
+    _title: 'Отложенные'
+    _controller: '\Drupal\provider\Controller\ContractList::getProposedContracts'
+  requirements:
+    _permission: 'access content'
 provider_contract:
   path: '/contract/{id}'
   defaults:
@@ -122,3 +154,67 @@ contract_chat_update:
     _controller: '\Drupal\provider\Controller\Chat::update'
   requirements:
     _permission: 'access content'
+provider_contracts_proposed:
+  path: '/user/proposed'
+  defaults:
+    _title: 'Предлагаемые контракты'
+    _controller: '\Drupal\provider\Controller\UserContracts::getProposed'
+  requirements:
+    _permission: 'access content'
+provider_contracts_confirm:
+  path: '/user/confirmed'
+  defaults:
+    _title: 'Контракты в работе'
+    _controller: '\Drupal\provider\Controller\UserContracts::getConfirmed'
+  requirements:
+    _permission: 'access content'
+provider_contracts_executed:
+  path: '/user/executed'
+  defaults:
+    _title: 'Выполненные контракты'
+    _controller: '\Drupal\provider\Controller\UserContracts::getExecuted'
+  requirements:
+    _permission: 'access content'
+contracts_proposed_cancel:
+  path: '/contracts/proposed/cancel/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\ContractList::later'
+  requirements:
+    _permission: 'access content'
+contracts_deferred_offer:
+  path: '/contracts/deferred/offer/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\ContractList::propose'
+  requirements:
+    _permission: 'access content'
+contracts_deferred_refuse:
+  path: '/contracts/deferred/refuse/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\ContractList::refuse'
+  requirements:
+    _permission: 'access content'
+contracts_deferred_cancel:
+  path: '/contracts/refused/later/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\ContractList::later'
+  requirements:
+    _permission: 'access content'
+
+contracts_user_proposed_confirm:
+  path: '/user/proposed/confirm/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\UserContracts::confirm'
+  requirements:
+    _permission: 'access content'
+contracts_user_proposed_cancel:
+  path: '/user/proposed/cancel/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\UserContracts::cancel'
+  requirements:
+    _permission: 'access content'
+#contracts_deferred_cancel:
+#  path: '/contracts/refused/later/{id}'
+#  defaults:
+#    _controller: '\Drupal\provider\Controller\ContractList::later'
+#  requirements:
+#    _permission: 'access content'

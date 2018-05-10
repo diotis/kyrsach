@@ -38,7 +38,7 @@
                             break;
                         }
                         case 'confirm':{
-                            //document.location.href = '/edit/'+(event.target.attributes['data'].nodeValue-id_changer);
+                            document.location.href = '/contract_create/'+id;
                             break;
                         }
                         default:{
