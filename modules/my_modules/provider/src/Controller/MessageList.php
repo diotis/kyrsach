@@ -14,9 +14,9 @@
 
 class MessageList extends ControllerBase
 {
-    public function get_incoming($bool){
+    public function get_incoming($state){
         if ($this->currentUser()->id() == '1') {
-            $entries = DBFunctions::load('provider',['refused_state' => $bool ? 'true':'false']);
+            $entries = DBFunctions::load('provider',['state' => $state]);
         } else {
         return $message['msg'] = array(
             '#markup'=> 'Данную страницу могут просматривать только администраторы!',
@@ -47,7 +47,7 @@ class MessageList extends ControllerBase
             $content['table'][$i]['user'] = array(
                 '#markup' => $this->t($entries[$i]->user),
             );
-            if($bool){
+            if($state=='refused'){
                 $content['table'][$i]['select'] = [
                     '#type' => 'select',
                     '#options' => [
@@ -60,7 +60,7 @@ class MessageList extends ControllerBase
                     '#attributes' => array('id' => 'move', 'data' => $entries[$i]->id),
                 ];
 
-            }else {
+            }else if ($state=='incoming'){
                 $content['table'][$i]['#attributes'] = array(
                         'read' => $entries[$i]->read_state);
                 $content['table'][$i]['select'] = [
@@ -68,11 +68,21 @@ class MessageList extends ControllerBase
                     '#options' => [
                         t('- Выбор действия -'),
                         'confirm' => $this
-                            ->t('Заключить сделку'),
+                            ->t('Предложить контракт'),
                         'hide' => $this
                             ->t('Пометить как прочитанное'),
                         'refuse' => $this
                             ->t('Отказать'),
+                    ],
+                    '#attributes' => array('id' => 'move', 'data' => $entries[$i]->id),
+                ];
+            }else if ($state=='processed'){
+                $content['table'][$i]['select'] = [
+                    '#type' => 'select',
+                    '#options' => [
+                        t('- Выбор действия -'),
+                        'confirm' => $this
+                            ->t('Предложить контракт'),
                     ],
                     '#attributes' => array('id' => 'move', 'data' => $entries[$i]->id),
                 ];
@@ -84,22 +94,25 @@ class MessageList extends ControllerBase
     }
 
     public function provider(){
-        return $this->get_incoming(false);
+        return $this->get_incoming('incoming');
     }
     public function refused(){
-        return $this->get_incoming(true);
+        return $this->get_incoming('refused');
+    }
+    public function  processed(){
+        return $this->get_incoming('processed');
     }
     public function delete_provider($id){
         return $this->build(DBFunctions::delete($id));
     }
     public function reestablish($id){
-        return $this->build(DBFunctions::provider_funs('`refused_state`',"'false'",$id));
+        return $this->build(DBFunctions::update('provider',$id,['state'=>'incoming']));
     }
     public function hide($id){
-        return $this->build(DBFunctions::provider_funs('`read_state`',"'true'",$id));
+        return $this->build(DBFunctions::update('provider',$id,['read_state'=>'true']));
     }
     public function refuse($id){
-        return $this->build(DBFunctions::provider_funs('`refused_state`',"'true'",$id));
+        return $this->build(DBFunctions::update('provider',$id,['state'=>'refused','read_state'=>'true']));
     }
     private function build($msg){
         $build = array(

@@ -108,7 +108,6 @@ class ProviderAdd extends FormBase
             $user->field_telephone->value = $val['tel'];
         }
         $currentDate = date('Y/m/d h:i:s', time());
-        $val['read'] = 'fls';
         $user_id = \Drupal::currentUser()->id();
         if(!$user_id)$user_id=-1;
         $query->fields([
@@ -117,7 +116,7 @@ class ProviderAdd extends FormBase
             'message' => $val['message'],
             'user' => $user_id,
             'read_state' => 'false',
-            'refused_state' => 'false',
+            'state' => 'false',
         ]);
         $query->execute();
         $user->save();

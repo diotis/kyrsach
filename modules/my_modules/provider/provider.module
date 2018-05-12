@@ -6,7 +6,7 @@ function provider_page_attachments(array &$attachments) {
         $attachments['#attached']['library'][] = 'provider/provider_css';
         $attachments['#attached']['library'][] = 'provider/module_js';
     }
-    if($url=='/provider') {
+    if($url=='/provider' || $url=='/processed') {
         $attachments['#attached']['library'][] = 'provider/provider_js';
     }
     if($url=='/refused') {
@@ -20,7 +20,7 @@ function provider_page_attachments(array &$attachments) {
         $attachments['#attached']['library'][] = 'provider/contract';
     }
     if (!(stristr($url, '/contracts') === FALSE)){
-        $attachments['#attached']['library'][] = 'provider/contracts_js';
+        $attachments['#attached']['library'][] = 'provider/contracts_libs';
     }
     if($url=='/user/proposed' || $url=='/user/confirmed' || $url=='/user/executed') {
         $attachments['#attached']['library'][] = 'provider/user_contracts';
@@ -29,6 +29,9 @@ function provider_page_attachments(array &$attachments) {
 function provider_theme() {
     return [
         'page__provider' => [
+            'template' => 'page--provider',
+        ],
+        'page__processed' => [
             'template' => 'page--provider',
         ],
         'page__refused' => [

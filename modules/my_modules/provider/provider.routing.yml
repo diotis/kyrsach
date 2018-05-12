@@ -5,8 +5,6 @@ provider.provider:
     _title: 'Оформить заказ'
   requirements:
     _permission: 'access content'
-
-
 provider_table:
   path: '/provider'
   defaults:
@@ -14,48 +12,43 @@ provider_table:
     _controller: '\Drupal\provider\Controller\MessageList::provider'
   requirements:
     _permission: 'access content'
-
-
 provider_hide:
   path: '/hide/{id}'
   defaults:
     _controller: '\Drupal\provider\Controller\MessageList::hide'
   requirements:
     _permission: 'access content'
-
-
 provider_refuse:
   path: '/refuse/{id}'
   defaults:
     _controller: '\Drupal\provider\Controller\MessageList::refuse'
   requirements:
     _permission: 'access content'
-
-
 provider_refused:
   path: '/refused'
   defaults:
     _controller: '\Drupal\provider\Controller\MessageList::refused'
   requirements:
     _permission: 'access content'
-
-
 provider_delete_provider:
   path: '/delete_provider/{id}'
   defaults:
     _controller: '\Drupal\provider\Controller\MessageList::delete_provider'
   requirements:
     _permission: 'access content'
-
-
 provider_reestablish:
   path: '/reestablish/{id}'
   defaults:
     _controller: '\Drupal\provider\Controller\MessageList::reestablish'
   requirements:
     _permission: 'access content'
-
-
+provider_processed:
+  path: '/processed'
+  defaults:
+    _title: 'Обработанные'
+    _controller: '\Drupal\provider\Controller\MessageList::processed'
+  requirements:
+    _permission: 'access content'
 provider_create_contract:
   path: '/contract_create/{id}'
   defaults:
@@ -98,7 +91,7 @@ provider_contract_query_refuse:
 provider_contract_list_work:
   path: '/contracts/in_work'
   defaults:
-    _title: 'Подтвержденные контракты'
+    _title: 'Контракты в работе'
     _controller: '\Drupal\provider\Controller\ContractList::getConfirmedContracts'
   requirements:
     _permission: 'access content'
@@ -121,6 +114,12 @@ provider_contract_executed:
   defaults:
     _title: 'Завершенные'
     _controller: '\Drupal\provider\Controller\ContractList::getExecutedContracts'
+  requirements:
+    _permission: 'access content'
+provider_contract_execut:
+  path: '/contracts/in_work/complete/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\ContractList::execut'
   requirements:
     _permission: 'access content'
 provider_contract_proposed:
@@ -210,6 +209,12 @@ contracts_user_proposed_cancel:
   path: '/user/proposed/cancel/{id}'
   defaults:
     _controller: '\Drupal\provider\Controller\UserContracts::cancel'
+  requirements:
+    _permission: 'access content'
+contracts_user_completed:
+  path: '/user/confirmed/end/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\UserContracts::complete'
   requirements:
     _permission: 'access content'
 #contracts_deferred_cancel:

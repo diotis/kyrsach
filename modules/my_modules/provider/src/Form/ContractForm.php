@@ -10,67 +10,65 @@ namespace Drupal\provider\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\provider\DBFunctions;
+use Drupal\node\Entity\Node;
 
-class ContractForm extends FormBase
-{
-    public function buildForm(array $form, FormStateInterface $form_state)
-    {
-        $form['first_name'] = [
+class ContractForm extends FormBase{
+    public function buildForm(array $form, FormStateInterface $form_state){
+        $form['city'] = [
             '#type' => 'textfield',
-            '#title' => $this->t('Имя'),
+            '#title' => $this->t('Город'),
             '#required' => TRUE,
         ];
-        $form['last_name'] = [
-            '#type' => 'textfield',
-            '#title' => $this->t('Фамилия'),
-            '#required' => TRUE,
-        ];
-
         $form['subject'] = [
             '#type' => 'textfield',
-            '#title' => $this->t('Тема'),
+            '#title' => $this->t('Заголовок'),
             '#required' => TRUE,
         ];
-
         $form['message'] = [
             '#type' => 'textarea',
-            '#title' => $this->t('Сообщение'),
+            '#title' => $this->t('Контракт'),
             '#required' => TRUE,
         ];
-
-        $form['email'] = array(
-            '#type' => 'email',
-            '#title' => $this->t('E-mail'),
-            '#placeholder' => $this->t('example@gmail.com'),
-        );
-        $form['tel'] = array(
-            '#type' => 'tel',
-            '#title' => $this->t('Телефон'),
-            '#placeholder' => $this->t('+375 (..) ... ... .'),
-            '#pattern' => '375[0-9]{9}',
-        );
         $form['submit'] = [
             '#type' => 'submit',
-            '#value' => $this->t('Оставить заказ'),
+            '#value' => $this->t('Предложить контракт'),
         ];
         return $form;
     }
 
-    public function getFormId()
-    {
+    public function getFormId(){
         return 'contract_form';
     }
-
-    public function validateForm(array &$form, FormStateInterface $form_state)
-    {
-    }
-
-
     public function submitForm(array &$form, FormStateInterface $form_state)
     {
+        //города в таблице нету provider
+        $id = str_replace('/contract_create/', '', \Drupal::service('path.current')->getPath());
+        $entry = DBFunctions::load('provider', ['id' => $id])[0];
+        $val = $form_state->getValues();
+        $user = user_load($entry->user);
+        $node = Node::create([
+            'type' => 'kontrakt',
+            'title' => 'Contract ' . $user->field_familia->value . ' ' . $user->field_name->value,
+            'field_gorod' => $val['city'],
+            'field_zagolovok' => $val['subject'],
+            'field_predlozen' => $entry->user,
+            'body' => $val['message']
+        ]);
+        $node->save();
 
+        DBFunctions::add('contract', [
+            'user_id' => $entry->user,
+            'date' => date('Y/m/d h:i:s', time()),
+            'caption' => $val['subject'],
+            'data' => $val['message'],
+            'state' => 'new',
+            'nid' => $node->id()
+        ]);
 
-        drupal_set_message('Submit!');
+        DBFunctions::update('provider', $id, ['state' => 'processed']);
+        //переместить в обработанные
+        drupal_set_message(t('Контракт добавлен в '.'<a href="/contracts/new">Новые</a>.'.'<a href="/node/'.$node->id().'">Контаркт</a>'));
     }
 
 }

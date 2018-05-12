@@ -21,7 +21,11 @@ class ContractList extends ControllerBase{
         return new Response(render($build));
     }
     public static function getContracts(array $conditions = []){
-        $entries = DBFunctions::load('contract', $conditions);
+        if ($conditions['state'] == 'confirmed')
+            $entries = DBFunctions::whereStates('confirmed','completed');
+        else
+            $entries = DBFunctions::load('contract', $conditions);
+
         //перевернуть массив
         $content = [];
         $headers = ['№', t('Дата'), t('Заголовок'), t('Пользователь'), t('Функции')];
@@ -48,7 +52,6 @@ class ContractList extends ControllerBase{
                 '#markup' => $user_label,
             );
 
-
             if ($conditions['state'] == 'new')
                 $content['table'][$i]['select'] = [
                     '#type' => 'select',
@@ -57,6 +60,7 @@ class ContractList extends ControllerBase{
                         'later' => 'Отложить',
                         'offer' => 'Предложить',
                         'refuse' => 'Отказать',
+                        'view' => 'Просмотреть'
                     ],
                     '#attributes' => $attr,
                 ];
@@ -66,6 +70,7 @@ class ContractList extends ControllerBase{
                     '#options' => [
                         t('- Выбор действия -'),
                         'cancel' => 'Отмена',
+                        'view' => 'Просмотреть'
                     ],
                     '#attributes' => $attr,
                 ];
@@ -76,6 +81,7 @@ class ContractList extends ControllerBase{
                         t('- Выбор действия -'),
                         'offer' => 'Предложить',
                         'refuse' => 'Отказать',
+                        'view' => 'Просмотреть'
                     ],
                     '#attributes' => $attr,
                 ];
@@ -85,12 +91,32 @@ class ContractList extends ControllerBase{
                     '#options' => [
                         t('- Выбор действия -'),
                         'later' => 'Восстановить',
+                        'view' => 'Просмотреть'
                     ],
                     '#attributes' => $attr,
                 ];
-
-
-            $content['table'][$i]['#attributes'] = ['user_id' => $entries[$i]->user_id];
+            else if ($conditions['state'] == 'confirmed') {
+                $options = [];
+                if ($entries[$i]->state!='confirmed'){
+                    $options =[ t('- Выбор действия -'),
+                        'go' => 'Перейти',
+                        'view' => 'Просмотреть',
+                        'complete' => 'Завершить',
+                    ];
+                }else
+                    $options =[ t('- Выбор действия -'),
+                    'go' => 'Перейти',
+                    'view' => 'Просмотреть'
+                ];
+                $content['table'][$i]['select'] = [
+                    '#type' => 'select',
+                    '#options' =>$options,
+                    '#attributes' => $attr,
+                ];
+            }
+            $content['table'][$i]['#attributes']['state'] = $entries[$i]->state;
+            $content['table'][$i]['#attributes']['user_id'] = $entries[$i]->user_id;
+            $content['table'][$i]['#attributes']['node'] = $entries[$i]->nid;
         }
         $content['#cache']['max-age'] = 0;
         return $content;
@@ -108,7 +134,7 @@ class ContractList extends ControllerBase{
     public function getDeferredContracts(){
         return $this->getContracts(['state'=>'deferred']);
     }
-    //В работе контракты
+    //В работе контракты //completed, 'state'=>'completed']
     public function getConfirmedContracts(){
         return $this->getContracts(['state'=>'confirmed']);
     }
@@ -132,5 +158,8 @@ class ContractList extends ControllerBase{
     public function refuse($id){
         return $this->build(DBFunctions::update('contract',$id,['state'=>'refused']));
     }
-
+    //Принять завершение
+    public function execut($id){
+        return $this->build(DBFunctions::update('contract',$id,['state'=>'executed']));
+    }
 }

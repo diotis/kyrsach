@@ -127,4 +127,12 @@ class DBFunctions {
         $select->where('id > :last', [':last' => $last]);
         return $select->execute()->fetchAll();
     }
+
+    public static function whereStates($state1,$state2){
+        $select = db_select('contract','orders');
+        $select->fields('orders');
+        //$select->condition('user_id', $id);
+        $select->where('(state = :state1) OR (state = :state2)  ', [':state1' => $state1,':state2'=>$state2]);
+        return $select->execute()->fetchAll();
+    }
 }

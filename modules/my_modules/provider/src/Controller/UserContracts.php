@@ -22,6 +22,7 @@ class UserContracts extends ControllerBase{
     }
     public function getUserContracts($state)
     {
+        //confirmed  completed
         $entries = DBFunctions::load('contract', ['user_id' => \Drupal::currentUser()->id(),
             'state' => $state]);
         //перевернуть массив
@@ -76,6 +77,7 @@ class UserContracts extends ControllerBase{
                     ],
                     '#attributes' => array('id' => 'actions', 'data' => $entries[$i]->id),
                 ];
+            $content['table'][$i]['#attributes']['state'] = $entries[$i]->state;
         }
         $content['#cache']['max-age'] = 0;
         return $content;
@@ -99,5 +101,9 @@ class UserContracts extends ControllerBase{
         return $this->build(DBFunctions::update('contract',$id,['state'=>'refused']));
     }
     //Просмотреть
+    //Завершить
+    public function complete($id){
+        return $this->build(DBFunctions::update('contract',$id,['state'=>'completed']));
+    }
 
 }
