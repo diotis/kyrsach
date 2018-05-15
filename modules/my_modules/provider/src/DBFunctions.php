@@ -135,4 +135,5 @@ class DBFunctions {
         $select->where('(state = :state1) OR (state = :state2)  ', [':state1' => $state1,':state2'=>$state2]);
         return $select->execute()->fetchAll();
     }
+
 }

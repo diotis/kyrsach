@@ -78,6 +78,7 @@ class UserContracts extends ControllerBase{
                     '#attributes' => array('id' => 'actions', 'data' => $entries[$i]->id),
                 ];
             $content['table'][$i]['#attributes']['state'] = $entries[$i]->state;
+            $content['table'][$i]['#attributes']['node'] = $entries[$i]->nid;
         }
         $content['#cache']['max-age'] = 0;
         return $content;
@@ -105,5 +106,16 @@ class UserContracts extends ControllerBase{
     public function complete($id){
         return $this->build(DBFunctions::update('contract',$id,['state'=>'completed']));
     }
-
+    //контракт
+    public function getContractInfo($id){
+        return $this->build(\GuzzleHttp\json_encode(DBFunctions::load('contract',['id'=>$id])));
+    }
+    //сохранить транзакцию
+    public function setTransaction($hash){
+        return $this->build(DBFunctions::add('ethereum',[
+            'hash'=>$hash,
+            'date'=>date('Y/m/d h:i:s', time()),
+            'user_id'=>\Drupal::currentUser()->id()
+        ]));
+    }
 }

@@ -3,6 +3,11 @@
         attach: function (context) {
             $(document).ready(function () {
                 console.log('contracts.js');
+
+                function printError(msg) {
+                    document.getElementById('page-info').innerHTML = msg;
+                }
+
                 var location = (window.location.href).replace("https://mystore/contracts/", "");
                 if (location == '') {
                     location = 'new'
@@ -37,6 +42,10 @@
                                 // data_log(data, function () {
                                 $(tr).remove();
                                 // });
+                            },
+                            error: function (jqXHR, error, errorThrown) {
+                                console.log(jqXHR, error, errorThrown);
+                                printError(error);
                             }
                         });
                 });

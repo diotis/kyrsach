@@ -217,9 +217,21 @@ contracts_user_completed:
     _controller: '\Drupal\provider\Controller\UserContracts::complete'
   requirements:
     _permission: 'access content'
-#contracts_deferred_cancel:
-#  path: '/contracts/refused/later/{id}'
-#  defaults:
-#    _controller: '\Drupal\provider\Controller\ContractList::later'
-#  requirements:
-#    _permission: 'access content'
+contracts_user_executed:
+  path: '/user/executed/contract/{id}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\UserContracts::getContractInfo'
+  requirements:
+    _permission: 'access content'
+user_contract_blockchain:
+  path: '/user/executed/transaction/{hash}'
+  defaults:
+    _controller: '\Drupal\provider\Controller\UserContracts::setTransaction'
+  requirements:
+    _permission: 'access content'
+user_transactions:
+  path: '/user/transactions'
+  defaults:
+    _controller: '\Drupal\provider\Controller\Transactions::getUserTransactions'
+  requirements:
+    _permission: 'access content'

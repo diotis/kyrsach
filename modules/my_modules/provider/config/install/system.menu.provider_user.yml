@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: provider_user
+label: 'Provider user'
+description: 'Menu for user provider'
+locked: false

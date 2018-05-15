@@ -3,6 +3,10 @@
         attach: function (context) {
             $(document).ready(function () {
 
+                function printError(msg) {
+                    document.getElementById('page-info').innerHTML = msg;
+                }
+
                 $("select").change(function() {
                     var tr = $(this).parent().parent().parent();
                     var id = this.getAttribute('data');
@@ -17,8 +21,9 @@
                                 $(tr).remove();
                             });
                         },
-                        error: function(jqXHR,error, errorThrown) {
-                            console.log(jqXHR,error,errorThrown);
+                        error: function (jqXHR, error, errorThrown) {
+                            console.log(jqXHR, error, errorThrown);
+                            printError(error);
                         }
                     });
                     function data_log(_data,callback) {
@@ -29,6 +34,7 @@
                         else {
                             callback();
                             console.log(data['data']);
+                            printError(data['data']);
                         }
 
                     }

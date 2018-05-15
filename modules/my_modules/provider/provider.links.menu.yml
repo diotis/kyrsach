@@ -1,0 +1,4 @@
+#provider.admin_item_1:
+#  title: 'New Admin Item 1'
+#  description: 'Description of link goes here.'
+#  route_name: provider.provider

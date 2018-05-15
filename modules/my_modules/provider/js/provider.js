@@ -58,8 +58,13 @@
                     else {
                         callback();
                         console.log(data['data']);
+                        printError(data['data']);
                     }
 
+                }
+
+                function printError(msg) {
+                    document.getElementById('page-info').innerHTML = msg;
                 }
 
             });

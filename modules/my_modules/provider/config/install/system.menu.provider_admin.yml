@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: provider_admin
+label: 'Provider admin'
+description: 'Menu for admin provider'
+locked: false
